@@ -10,77 +10,59 @@
 
 用独立的 watchdog 跑在 OpenClaw 进程外部，每 10 秒检查一次，连续 2 次失败自动重启。
 
-## 文件说明
+## 安装
 
-| 文件 | 说明 |
-|------|------|
-| `gateway_watchdog.py` | 核心脚本 |
-| `start_watchdog.bat` | Windows 启动脚本 |
-| `start_watchdog.sh` | Linux 启动脚本 |
-| `stop_watchdog.bat` | Windows 停止脚本 |
-| `stop_watchdog.sh` | Linux 停止脚本 |
-| `status_watchdog.bat` | Windows 状态脚本 |
-| `status_watchdog.sh` | Linux 状态脚本 |
+```bash
+# 克隆或下载
+git clone https://github.com/adminlove520/openclaw-gateway-watchdog.git
+cd openclaw-gateway-watchdog
+```
 
 ## 使用方法
 
-### Windows
-
-```batch
-:: 启动
-start_watchdog.bat
-
-:: 查看状态
-status_watchdog.bat
-
-:: 停止
-stop_watchdog.bat
-```
-
-### Linux
-
 ```bash
-# 启动
-./start_watchdog.sh
+# 启动 watchdog（自动检测 openclaw 路径）
+python gateway_watchdog.py start
 
 # 查看状态
-./status_watchdog.sh
+python gateway_watchdog.py status
 
-# 停止
-./stop_watchdog.sh
+# 重启 Gateway
+python gateway_watchdog.py restart
+
+# 停止 watchdog
+python gateway_watchdog.py stop
 ```
 
-### Docker (推荐)
+## 特性
 
-```bash
-# 后台运行
-docker run -d --name watchdog \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  your-image
+- ✅ 自动检测 Windows/Linux
+- ✅ 自动查找 openclaw 命令路径
+- ✅ 路径保存到配置文件 (`~/.openclaw/gateway_watchdog.json`)
+- ✅ 单文件，无多余脚本
+- ✅ 支持自定义检查间隔和失败阈值
 
-# 或用 docker-compose
-```
+## 配置
+
+首次运行会自动检测 openclaw 并保存路径到:
+- Windows: `C:\Users\<用户名>\.openclaw\gateway_watchdog.json`
+- Linux: `~/.openclaw/gateway_watchdog.json`
 
 ## 日志
 
 - Windows: `C:\Users\<用户名>\.openclaw\gateway_watchdog.log`
-- Linux: `/root/.openclaw/gateway_watchdog.log`
+- Linux: `~/.openclaw/gateway_watchdog.log`
 
-## 配置
+## 命令行选项
+
+```bash
+python gateway_watchdog.py start --interval 10 --threshold 2
+```
 
 | 参数 | 默认值 | 说明 |
 |------|--------|------|
-| CHECK_INTERVAL | 10 | 检查间隔(秒) |
-| FAIL_THRESHOLD | 2 | 连续失败次数 |
-
-修改 `gateway_watchdog.py` 顶部的常量即可。
-
-## 原理
-
-| 方案 | 问题 |
-|------|------|
-| OpenClaw cron | Gateway 挂了 → cron 收不到 → 死锁 |
-| 外部 watchdog | Gateway 挂了 → 外部进程检测到 → 触发重启 |
+| --interval | 10 | 检查间隔(秒) |
+| --threshold | 2 | 连续失败次数 |
 
 ---
 
