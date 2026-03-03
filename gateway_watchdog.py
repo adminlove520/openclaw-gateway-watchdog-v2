@@ -244,7 +244,7 @@ def start_watchdog():
     
     if platform.system() == "Windows":
         # Windows: 用 start /b 后台运行
-        subprocess.Popen(
+        proc = subprocess.Popen(
             [sys.executable, __file__, "run"],
             stdout=open(LOG_FILE, "a"),
             stderr=subprocess.STDOUT,
@@ -253,7 +253,7 @@ def start_watchdog():
         )
     else:
         # Linux: nohup
-        subprocess.Popen(
+        proc = subprocess.Popen(
             ["nohup", sys.executable, __file__, "run"],
             stdout=open(LOG_FILE, "a"),
             stderr=subprocess.STDOUT,
@@ -263,9 +263,9 @@ def start_watchdog():
     # 等待一下让进程启动
     time.sleep(2)
     
-    # 写入 PID
+    # 写入子进程 PID
     with open(PID_FILE, "w") as f:
-        f.write(str(os.getpid()))
+        f.write(str(proc.pid))
     
     print(f"✅ Gateway Watchdog 已启动")
     print(f"日志: {LOG_FILE}")
