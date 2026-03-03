@@ -290,8 +290,10 @@ def stop_watchdog():
         print(f"停止失败: {e}")
 
 def status_watchdog():
-    """查看 watchdog 状态"""
-    print("=== Gateway Watchdog 状态 ===")
+    """查看状态"""
+    print("=" * 50)
+    print("1. Gateway Watchdog 进程")
+    print("=" * 50)
     
     # 检查 watchdog
     if PID_FILE.exists():
@@ -313,14 +315,16 @@ def status_watchdog():
             running = False
         
         if running:
-            print(f"状态: 🟢 运行中 (PID: {pid})")
+            print(f"✅ 运行中 (PID: {pid})")
         else:
-            print("状态: 🔴 已停止 (PID 文件过期)")
+            print("❌ 已停止 (PID 文件过期)")
     else:
-        print("状态: 🔴 未运行")
+        print("❌ 未运行")
     
     # 检查 Gateway
-    print("\n=== Gateway 状态 ===")
+    print("\n" + "=" * 50)
+    print("2. OpenClaw Gateway")
+    print("=" * 50)
     try:
         cmd = get_openclaw_cmd() + ["gateway", "status"]
         result = subprocess.run(
@@ -331,22 +335,18 @@ def status_watchdog():
             shell=(platform.system() == "Windows")
         )
         if result.returncode == 0:
-            print("状态: 🟢 运行中")
+            print("✅ Gateway 运行中")
+            # 显示详细输出
+            if result.stdout.strip():
+                print(result.stdout)
         else:
-            print("状态: 🔴 已停止")
-            print(result.stderr[:200] if result.stderr else result.stdout[:200])
+            print("❌ Gateway 已停止")
+            if result.stderr.strip():
+                print(result.stderr[:500])
+            elif result.stdout.strip():
+                print(result.stdout[:500])
     except Exception as e:
-        print(f"状态: ❓ 无法检查 ({e})")
-    
-    # 显示日志
-    print("\n=== 最近日志 ===")
-    if LOG_FILE.exists():
-        with open(LOG_FILE, "r") as f:
-            lines = f.readlines()
-            for line in lines[-10:]:
-                print(line.rstrip())
-    else:
-        print("无日志")
+        print(f"❌ 检查失败: {e}")
 
 def restart_gateway_cmd():
     """重启 Gateway 命令"""
