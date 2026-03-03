@@ -21,11 +21,11 @@ import signal
 from pathlib import Path
 from pathlib import PureWindowsPath
 
-# 配置目录
-CONFIG_DIR = Path.home() / ".openclaw"
-CONFIG_FILE = CONFIG_DIR / "gateway_watchdog.json"
-LOG_FILE = CONFIG_DIR / "gateway_watchdog.log"
-PID_FILE = CONFIG_DIR / "gateway_watchdog.pid"
+# 配置目录 - 放脚本同目录下
+SCRIPT_DIR = Path(__file__).parent.resolve()
+CONFIG_FILE = SCRIPT_DIR / "gateway_watchdog.json"
+LOG_FILE = SCRIPT_DIR / "gateway_watchdog.log"
+PID_FILE = SCRIPT_DIR / "gateway_watchdog.pid"
 
 CHECK_INTERVAL = 10  # 秒
 FAIL_THRESHOLD = 2   # 连续失败次数
@@ -43,7 +43,6 @@ def load_config() -> dict:
 
 def save_config(config: dict):
     """保存配置"""
-    CONFIG_DIR.mkdir(parents=True, exist_ok=True)
     with open(CONFIG_FILE, "w", encoding="utf-8") as f:
         json.dump(config, f, indent=2, ensure_ascii=False)
 
@@ -136,7 +135,6 @@ def log(msg: str):
     timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
     line = f"[{timestamp}] {msg}"
     print(line)
-    LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
     with open(LOG_FILE, "a", encoding="utf-8") as f:
         f.write(line + "\n")
 

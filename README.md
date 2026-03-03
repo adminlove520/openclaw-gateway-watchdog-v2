@@ -44,14 +44,14 @@ python gateway_watchdog.py stop
 
 ## 配置
 
-首次运行会自动检测 openclaw 并保存路径到:
-- Windows: `C:\Users\<用户名>\.openclaw\gateway_watchdog.json`
-- Linux: `~/.openclaw/gateway_watchdog.json`
+首次运行会自动检测 openclaw 并保存路径到 `gateway_watchdog.json`（同目录下）。
 
 ## 日志
 
-- Windows: `C:\Users\<用户名>\.openclaw\gateway_watchdog.log`
-- Linux: `~/.openclaw/gateway_watchdog.log`
+日志和 PID 文件都在脚本同目录下:
+- `gateway_watchdog.log`
+- `gateway_watchdog.pid`
+- `gateway_watchdog.json` (配置)
 
 ## 命令行选项
 
