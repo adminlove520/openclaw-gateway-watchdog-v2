@@ -13,7 +13,6 @@
 ## 安装
 
 ```bash
-# 克隆或下载
 git clone https://github.com/adminlove520/openclaw-gateway-watchdog.git
 cd openclaw-gateway-watchdog
 ```
@@ -21,10 +20,10 @@ cd openclaw-gateway-watchdog
 ## 使用方法
 
 ```bash
-# 启动 watchdog（自动检测 openclaw 路径）
+# 启动 watchdog
 python gateway_watchdog.py start
 
-# 查看状态
+# 查看状态 (同时显示 watchdog 和 Gateway 状态)
 python gateway_watchdog.py status
 
 # 重启 Gateway
@@ -33,25 +32,6 @@ python gateway_watchdog.py restart
 # 停止 watchdog
 python gateway_watchdog.py stop
 ```
-
-## 特性
-
-- ✅ 自动检测 Windows/Linux
-- ✅ 自动查找 openclaw 命令路径
-- ✅ 路径保存到配置文件 (`~/.openclaw/gateway_watchdog.json`)
-- ✅ 单文件，无多余脚本
-- ✅ 支持自定义检查间隔和失败阈值
-
-## 配置
-
-首次运行会自动检测 openclaw 并保存路径到 `gateway_watchdog.json`（同目录下）。
-
-## 日志
-
-日志和 PID 文件都在脚本同目录下:
-- `gateway_watchdog.log`
-- `gateway_watchdog.pid`
-- `gateway_watchdog.json` (配置)
 
 ## 命令行选项
 
@@ -63,6 +43,18 @@ python gateway_watchdog.py start --interval 10 --threshold 2
 |------|--------|------|
 | --interval | 10 | 检查间隔(秒) |
 | --threshold | 2 | 连续失败次数 |
+
+## 本地文件
+
+运行后会生成以下文件（不要提交到 git）：
+- `gateway_watchdog.json` - 配置（openclaw 路径）
+- `gateway_watchdog.log` - 日志
+- `gateway_watchdog.pid` - 进程 PID
+
+## 兼容性
+
+- ✅ Windows
+- ✅ Linux
 
 ---
 
