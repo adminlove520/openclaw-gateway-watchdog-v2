@@ -13,6 +13,10 @@
 ## 安装
 
 ```bash
+# 方式1: 一键安装（推荐）
+python install.py
+
+# 方式2: 手动
 git clone https://github.com/adminlove520/openclaw-gateway-watchdog.git
 cd openclaw-gateway-watchdog
 ```
@@ -20,10 +24,13 @@ cd openclaw-gateway-watchdog
 ## 使用方法
 
 ```bash
-# 启动 watchdog
+# 方式1: 一键启动
+python install.py
+
+# 方式2: 手动
 python gateway_watchdog.py start
 
-# 查看状态 (同时显示 watchdog 和 Gateway 状态)
+# 查看状态
 python gateway_watchdog.py status
 
 # 重启 Gateway
@@ -55,6 +62,14 @@ python gateway_watchdog.py start --interval 10 --threshold 2
 
 - ✅ Windows
 - ✅ Linux
+
+## ClawHub
+
+也可以从 ClawHub 安装：
+
+```bash
+npx clawdhub install gateway-watchdog-xiaoxi
+```
 
 ---
 
